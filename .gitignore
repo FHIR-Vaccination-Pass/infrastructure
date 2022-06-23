@@ -1,0 +1,7 @@
+# Self-signed certificates for local development
+**/*.p12
+**/*.pem
+**/*.key
+
+# Jetbrains IDEs
+.idea/
