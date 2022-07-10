@@ -2,6 +2,7 @@
 **/*.p12
 **/*.pem
 **/*.key
+**/*.crt
 
 # Jetbrains IDEs
 .idea/
