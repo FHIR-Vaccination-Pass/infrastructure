@@ -54,6 +54,22 @@
         "attributes": {}
       },
       {
+        "id": "6e09f54d-7fea-4602-8174-4413e63d6bb0",
+        "name": "md",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "11d78bf6-6d10-4484-baba-a1388379d68b",
+        "attributes": {}
+      },
+      {
+        "id": "8ab1b320-5703-488a-9cb5-c9d3500909f3",
+        "name": "patient",
+        "composite": false,
+        "clientRole": false,
+        "containerId": "11d78bf6-6d10-4484-baba-a1388379d68b",
+        "attributes": {}
+      },
+      {
         "id": "39eb64c8-66a9-4983-9c81-27ea7e2f6273",
         "name": "uma_authorization",
         "description": "${role_uma_authorization}",
@@ -523,7 +539,33 @@
       } ],
       "disableableCredentialTypes" : [ "password" ],
       "requiredActions" : [ ],
-      "realmRoles" : [ "default-roles-quarkus", "user" ],
+      "realmRoles" : [ "default-roles-quarkus", "user", "patient" ],
+      "notBefore" : 0,
+      "groups" : [ ]
+    },
+    {
+      "id" : "eb4123a3-b722-4798-9af5-8957f823657b",
+      "username" : "bob",
+      "firstName": "Bob",
+      "lastName": "Beamer",
+      "enabled" : true,
+      "totp" : false,
+      "emailVerified" : false,
+      "credentials" : [ {
+        "type" : "password",
+        "hashedSaltedValue" : "A3okqV2T/ybXTVEgKfosoSjP8Yc9IZbFP/SY4cEd6hag7TABQrQ6nUSuwagGt96l8cw1DTijO75PqX6uiTXMzw==",
+        "salt" : "sl4mXx6T9FypPH/s9TngfQ==",
+        "hashIterations" : 27500,
+        "counter" : 0,
+        "algorithm" : "pbkdf2-sha256",
+        "digits" : 0,
+        "period" : 0,
+        "createdDate" : 1554245879115,
+        "config" : { }
+      } ],
+      "disableableCredentialTypes" : [ "password" ],
+      "requiredActions" : [ ],
+      "realmRoles" : [ "default-roles-quarkus", "user", "md" ],
       "notBefore" : 0,
       "groups" : [ ]
     }
@@ -909,6 +951,24 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": true,
       "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "id": "f672f906-acbf-4a12-8c88-6ff343031e45",
+          "name": "realm roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "multivalued": "true",
+            "userinfo.token.claim": "false",
+            "user.attribute": "foo",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "realm_access.roles",
+            "jsonType.label": "String"
+          }
+        }
+      ],
       "defaultClientScopes": [
         "web-origins",
         "acr",
