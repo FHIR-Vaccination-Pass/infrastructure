@@ -4,8 +4,12 @@ services:
     ports:
       - 9443:9443
     volumes:
-      - './config-ibm-fhir/server.xml:/opt/ol/wlp/usr/servers/defaultServer/server.xml'
+      # Security
       - './config-ibm-fhir/resources/security/fhirKeyStore.p12:/opt/ol/wlp/usr/servers/defaultServer/resources/security/fhirKeyStore.p12'
+      # Configuration
+      - './config-ibm-fhir/server.xml:/opt/ol/wlp/usr/servers/defaultServer/server.xml'
+      - './config-ibm-fhir/config/default/fhir-server-config.json:/opt/ol/wlp/usr/servers/defaultServer/config/default/fhir-server-config.json'
+      # Userlib
       - './config-ibm-fhir/userlib/:/opt/ol/wlp/usr/servers/defaultServer/userlib'
     environment:
       # https://ibm.github.io/FHIR/guides/FHIRServerUsersGuide/#21-installing-a-new-server
