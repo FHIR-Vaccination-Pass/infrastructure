@@ -7,9 +7,13 @@ cp ./cacerts ./rootCA.p12
 keytool -importcert -storetype PKCS12 -keystore rootCA.p12 -storepass changeit -alias rootCA -file rootCA.pem -noprompt
 
 pushd ./config-ibm-fhir/resources/security > /dev/null
-mkcert -pkcs12 -p12-file fhirKeyStore.p12 localhost 127.0.0.1 ::1
+mkcert -pkcs12 -p12-file fhirKeyStore.p12 ibm-fhir localhost 127.0.0.1 ::1
 popd > /dev/null
 
 pushd ./config-keycloak > /dev/null
-mkcert -pkcs12 -p12-file keycloak-keystore.p12 localhost 127.0.0.1 ::1
+mkcert -pkcs12 -p12-file keycloak-keystore.p12 keycloak localhost 127.0.0.1 ::1
+popd > /dev/null
+
+pushd ./config-vp-server > /dev/null
+mkcert -pkcs12 -p12-file quarkus-keystore.p12 vp-server localhost 127.0.0.1 ::1
 popd > /dev/null
