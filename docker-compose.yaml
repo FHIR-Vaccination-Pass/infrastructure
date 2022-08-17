@@ -73,3 +73,7 @@ services:
     environment:
       JAVA_OPTS_APPEND: -Djavax.net.ssl.trustStore=/deployments/config/rootCA.p12
     restart: on-failure
+    healthcheck:
+      test: ['CMD', 'curl', '-k', '-f', 'https://localhost:8443/q/health/ready']
+      start_period: 30s
+      interval: 10s
