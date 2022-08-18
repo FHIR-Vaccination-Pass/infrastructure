@@ -1,0 +1,33 @@
+fhirclient:
+  rest:
+    base:
+      url: 'https://ibm-fhir:9443/fhir-server/api/v4'
+  basicauth:
+    enabled: 'true'
+    username: 'fhiruser'
+    password: 'supersecret'
+
+fhir-notification:
+  websocket:
+    url: 'wss://ibm-fhir:9443/fhir-server/api/v4/notification'
+
+lifecycle:
+  on-startup:
+    bootstrap: true
+
+quarkus:
+  http:
+    cors:
+      ~: true
+      origins: 'https://localhost:3000'
+
+    ssl:
+      certificate:
+        key-store-file: /deployments/config/quarkus-keystore.p12
+        key-store-password: changeit
+
+  oidc:
+    auth-server-url: 'https://keycloak:10443/realms/quarkus'
+    client-id: 'backend-service'
+    credentials:
+      secret: 'secret'

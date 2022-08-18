@@ -1,5 +1,8 @@
 services:
   ibm-fhir:
+    depends_on:
+      keycloak:
+        condition: service_healthy
     image: ibmcom/ibm-fhir-server:4.11.1
     ports:
       - 9443:9443
@@ -16,6 +19,19 @@ services:
       BOOTSTRAP_DB: true
       FHIR_USER_PASSWORD: supersecret
       FHIR_ADMIN_PASSWORD: extrasecret
+    restart: on-failure
+    healthcheck:
+      test: [
+        'CMD',
+        'curl',
+        '-k',
+        '-u',
+        'fhiruser:supersecret',
+        '-f',
+        'https://localhost:9443/fhir-server/api/v4/$healthcheck'
+      ]
+      start_period: 5m
+      interval: 10s
 
   keycloak:
     image: quay.io/keycloak/keycloak:18.0.1
@@ -31,5 +47,33 @@ services:
       KC_HOSTNAME_STRICT: false
       KC_HTTPS_KEY_STORE_FILE: /etc/keycloak-keystore.p12
       KC_HTTPS_KEY_STORE_PASSWORD: changeit
+      KC_HEALTH_ENABLED: true
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+    restart: on-failure
+    healthcheck:
+      test: ['CMD', 'curl', '-k', '-f', 'https://localhost:10443/q/health/ready']
+      start_period: 30s
+      interval: 10s
+
+  vp-server:
+    depends_on:
+      ibm-fhir:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    image: ghcr.io/fhir-vaccination-pass/vaccination-pass-server:develop
+    ports:
+      - 8080:8080
+      - 8443:8443
+    volumes:
+      - './rootCA.p12:/deployments/config/rootCA.p12'
+      - './config-vp-server/quarkus-keystore.p12:/deployments/config/quarkus-keystore.p12'
+      - './config-vp-server/application.yaml:/deployments/config/application.yaml'
+    environment:
+      JAVA_OPTS_APPEND: -Djavax.net.ssl.trustStore=/deployments/config/rootCA.p12
+    restart: on-failure
+    healthcheck:
+      test: ['CMD', 'curl', '-k', '-f', 'https://localhost:8443/q/health/ready']
+      start_period: 30s
+      interval: 10s
