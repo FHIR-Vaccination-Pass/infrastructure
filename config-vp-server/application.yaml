@@ -11,6 +11,10 @@ fhir-notification:
   websocket:
     url: 'wss://ibm-fhir:9443/fhir-server/api/v4/notification'
 
+lifecycle:
+  on-startup:
+    bootstrap: true
+
 quarkus:
   http:
     cors:

@@ -62,7 +62,7 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_healthy
-    image: ghcr.io/fhir-vaccination-pass/vaccination-pass-server:feat-21-docker-image
+    image: ghcr.io/fhir-vaccination-pass/vaccination-pass-server:develop
     ports:
       - 8080:8080
       - 8443:8443
